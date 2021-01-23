@@ -1,18 +1,13 @@
+// 这时候我们点击 Square 的时候，浏览器会报错，因为我们还没有定义 handleClick 方法。我们现在来向 Board 里添加 handleClick 方法：
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 class Square extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value:null
-        }
-    }
     render() {
       return (
         <button 
             className="square" 
-            onClick={(a)=>{this.setState({value: this.props.value});console.log(a)}}
+            onClick={()=>{this.props.onClick()}}
         >
           {this.state.value}
         </button>
@@ -21,8 +16,22 @@ class Square extends React.Component {
   }
   
   class Board extends React.Component {
+      constructor(props) {
+          super(props)
+          this.state = {
+              squares: Array(9).fill(null)
+          }
+      }
+      handleClick(i){
+        const squares = this.state.squares.slice()
+        squares[i] = 'X'
+        this.setState({squares: squares})
+      }
     renderSquare(i) {
-      return <Square value={i} />;
+      return <Square 
+                value={this.state.squares[i]}
+                onClick={() => {this.handleClick(i)}}
+            />;
     }
   
     render() {
